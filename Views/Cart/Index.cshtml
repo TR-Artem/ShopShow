@@ -1,0 +1,89 @@
+@model CartViewModel
+@{
+    ViewData["Title"] = "Корзина";
+}
+
+<h1 class="mb-4">Корзина</h1>
+
+@* --- Alert (задание 4) --- *@
+@if (Model.IsEmpty)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        Корзина пуста.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+    </div>
+}
+else if (Model.JustAdded)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        Товар добавлен в корзину.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+    </div>
+}
+
+@if (!Model.IsEmpty)
+{
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Товар</th>
+                <th class="text-end">Цена</th>
+                <th class="text-center">Кол-во</th>
+                <th class="text-end">Сумма</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td class="text-end">@item.Price.ToString("C0")</td>
+                    <td class="text-center">@item.Quantity</td>
+                    <td class="text-end">@item.LineTotal.ToString("C0")</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="3">Итого</th>
+                <th class="text-end">@Model.TotalAmount.ToString("C0")</th>
+            </tr>
+        </tfoot>
+    </table>
+
+    @* --- Кнопка вызова модалки (задание 5) --- *@
+    <button type="button" class="btn btn-success btn-checkout" data-bs-toggle="modal" data-bs-target="#confirmOrderModal">
+        Оформить заказ
+    </button>
+
+    @* --- Модальное окно «Подтверждение заказа» --- *@
+    <div class="modal fade" id="confirmOrderModal" tabindex="-1" aria-labelledby="confirmOrderLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmOrderLabel">Подтверждение заказа</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <form asp-controller="Cart" asp-action="Checkout" method="post">
+                    <div class="modal-body">
+                        <p>Вы уверены, что хотите оформить заказ на сумму
+                            <strong>@Model.TotalAmount.ToString("C0")</strong>?</p>
+                        <ul class="list-group mb-3">
+                            @foreach (var item in Model.Items)
+                            {
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>@item.Name &times; @item.Quantity</span>
+                                    <span>@item.LineTotal.ToString("C0")</span>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Подтвердить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}

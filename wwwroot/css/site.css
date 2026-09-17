@@ -1,0 +1,59 @@
+/* Центрированный заголовок страницы */
+main > h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Усиление отступа у карточек на мобильных */
+@media (max-width: 767.98px) {
+    .product-card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Свой цвет для кнопки «Оформить заказ» */
+.btn-checkout {
+    background-color: #ff6b35;
+    border-color: #ff6b35;
+}
+.btn-checkout:hover {
+    background-color: #e85a2a;
+    border-color: #e85a2a;
+}
+
+/* Адаптивная таблица цен: вертикально на мобильных, горизонтально на десктопе */
+.price-table td {
+    padding: 0.25rem 0.5rem;
+}
+@media (min-width: 768px) {
+    .price-table {
+        display: table;
+    }
+}
+@media (max-width: 767.98px) {
+    .price-table tbody,
+    .price-table tr {
+        display: block;
+    }
+    .price-table td {
+        display: block;
+        text-align: left !important;
+    }
+}
+
+/* Состояния карточек товаров (доп. задание, сложный уровень) */
+.product-card.border-danger {
+    border-width: 2px;
+}
+.product-card.border-danger .card-img-top {
+    opacity: 0.6;
+}
+.product-card.border-success {
+    border-width: 2px;
+}
+
+/* Тег-фильтр */
+.tag-pill {
+    margin-right: 0.4rem;
+    margin-bottom: 0.4rem;
+}
