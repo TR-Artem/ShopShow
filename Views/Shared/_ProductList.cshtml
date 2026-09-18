@@ -1,0 +1,7 @@
+@model IEnumerable<Product>
+@* Partial без layout — именно этот HTML-фрагмент возвращает CatalogController.Search()
+   и им целиком заменяется innerHTML контейнера #catalogGrid в search.js *@
+@foreach (var p in Model)
+{
+    <partial name="_ProductCard" model="p" />
+}

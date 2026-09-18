@@ -1,4 +1,20 @@
-// Автоматически скрывает alert через 4 секунды (задание 4)
+// Обновление счётчика корзины при загрузке любой страницы (задание 5)
+document.addEventListener('DOMContentLoaded', async function () {
+    var badge = document.getElementById('cartBadge');
+    if (!badge) {
+        return;
+    }
+
+    try {
+        var response = await fetch('/Catalog/GetCartCount');
+        var data = await response.json();
+        badge.textContent = data.count > 0 ? data.count : '0';
+    } catch (error) {
+        console.error('Не удалось получить количество товаров в корзине:', error);
+    }
+});
+
+// Автоматически скрывает alert через 4 секунды (задание 4 предыдущей практики)
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.alert').forEach(function (alertEl) {
         setTimeout(function () {

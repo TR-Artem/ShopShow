@@ -16,70 +16,16 @@
     }
 </div>
 
-@* --- Сетка карточек товаров (задание 3) --- *@
-<div class="row g-4">
-    @foreach (var p in Model.Products)
-    {
-        @* --- Динамические классы и состояния (доп. задание, сложный уровень) --- *@
-        var borderClass = p.Stock == 0 ? "border-danger" : (p.DiscountPercent > 30 ? "border-success" : "");
-        var extraShadow = p.IsHit ? "shadow-sm" : "";
+@* --- Живой поиск без перезагрузки страницы (задание 3) --- *@
+<input type="text" id="searchInput" class="form-control mb-4"
+       placeholder="Поиск товаров..." autocomplete="off" />
 
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="card h-100 product-card @borderClass @extraShadow">
-                <img src="@p.ImageUrl" class="card-img-top img-fluid" alt="@p.Name">
-                <div class="card-body d-flex flex-column">
-
-                    <div class="mb-2">
-                        @if (p.IsHit)
-                        {
-                            <span class="badge bg-danger">Хит</span>
-                        }
-                        @if (p.DiscountPercent > 30)
-                        {
-                            <span class="badge bg-success">Большая скидка</span>
-                        }
-                        else if (p.HasDiscount)
-                        {
-                            <span class="badge bg-warning text-dark">Скидка</span>
-                        }
-                        @if (p.Stock == 0)
-                        {
-                            <span class="badge bg-secondary">Нет в наличии</span>
-                        }
-                    </div>
-
-                    <h5 class="card-title">@p.Name</h5>
-                    <p class="card-text text-muted small">@p.Description</p>
-
-                    @* --- Адаптивная таблица цен (доп. задание, лёгкий уровень) --- *@
-                    <table class="table table-borderless table-sm price-table mb-2">
-                        <tbody>
-                            @if (p.HasDiscount)
-                            {
-                                <tr>
-                                    <td class="text-muted">Обычная цена</td>
-                                    <td class="text-end text-decoration-line-through text-muted">
-                                        @p.OldPrice!.Value.ToString("C0")
-                                    </td>
-                                </tr>
-                            }
-                            <tr>
-                                <td class="fw-semibold">Цена</td>
-                                <td class="text-end fs-5 fw-bold text-primary">@p.Price.ToString("C0")</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div class="mt-auto">
-                        <form asp-controller="Cart" asp-action="Add" method="post">
-                            <input type="hidden" name="productId" value="@p.Id" />
-                            <button type="submit" class="btn btn-primary w-100" @(p.Stock == 0 ? "disabled" : "")>
-                                В корзину
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
+@* --- Сетка карточек товаров --- *@
+<div id="catalogGrid" class="row g-4">
+    <partial name="_ProductList" model="Model.Products" />
 </div>
+
+@section Scripts {
+    <script src="~/js/search.js" asp-append-version="true"></script>
+    <script src="~/js/cart.js" asp-append-version="true"></script>
+}
